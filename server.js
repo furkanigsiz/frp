@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? ['https://frp.onrender.com', 'http://frp.onrender.com'] 
+      ? ['https://frp-p70d.onrender.com', 'http://frp-p70d.onrender.com'] 
       : "http://localhost:3000",
     methods: ["GET", "POST"]
   }
