@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.MuiButton-root {
+  text-transform: none !important;
+}
+
+.MuiPaper-root {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  backdrop-filter: blur(5px);
+}
+
+.MuiTypography-h4 {
+  color: #2c3e50 !important;
+  font-weight: 600 !important;
+}
+
+.MuiTypography-h6 {
+  color: #34495e !important;
+  font-weight: 500 !important;
+}
+
+.MuiButton-outlined {
+  border-color: #3498db !important;
+  color: #3498db !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.MuiButton-outlined:hover {
+  background-color: rgba(52, 152, 219, 0.1) !important;
+}
+
+.MuiButton-contained {
+  background-color: #3498db !important;
+}
+
+.MuiButton-contained:hover {
+  background-color: #2980b9 !important;
+}
+
+/* Tema geçiş animasyonları */
+.theme-transition {
+  transition: all 0.5s ease-in-out;
+}
+
+.theme-transition-enter {
+  opacity: 0;
+}
+
+.theme-transition-enter-active {
+  opacity: 1;
+}
+
+.theme-transition-exit {
+  opacity: 1;
+}
+
+.theme-transition-exit-active {
+  opacity: 0;
+}
+
+/* Müzik kontrol butonları */
+.music-control {
+  transition: all 0.3s ease;
+}
+
+.music-control:hover {
+  transform: scale(1.1);
+}
+
+/* Tema butonları */
+.theme-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.theme-button:hover::after {
+  opacity: 1;
+}
