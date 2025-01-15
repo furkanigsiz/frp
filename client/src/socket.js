@@ -1,14 +1,14 @@
 import io from 'socket.io-client';
 
 const SOCKET_URL = process.env.NODE_ENV === 'production'
-  ? window.location.origin  // Production URL - otomatik olarak mevcut domain'i kullan
-  : 'http://localhost:5000';
+  ? 'https://frp-p70d.onrender.com'  // Production URL
+  : 'http://localhost:5000';         // Development URL
 
 console.log('Connecting to socket server at:', SOCKET_URL);
 
 const socket = io(SOCKET_URL, {
   transports: ['websocket', 'polling'],
-  upgrade: true,
+  withCredentials: true,
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000

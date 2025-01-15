@@ -8,24 +8,27 @@ require('dotenv').config();
 const app = express();
 const server = http.createServer(app);
 
-// Production için CORS ayarları
+// CORS ayarları
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://frp-p70d.onrender.com'
+    : 'http://localhost:3000',
+  credentials: true
+}));
+
+app.use(express.json());
+
+// Socket.IO ayarları
 const io = socketIo(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? '*'  // Tüm domainlere izin ver
-      : "http://localhost:3000",
+      ? 'https://frp-p70d.onrender.com'
+      : 'http://localhost:3000',
     methods: ["GET", "POST"],
-    credentials: true,
-    allowedHeaders: ["my-custom-header"]
+    credentials: true
   },
-  transports: ['websocket', 'polling'],
-  allowEIO3: true,
-  pingTimeout: 60000,
-  pingInterval: 25000
+  transports: ['websocket', 'polling']
 });
-
-app.use(cors());
-app.use(express.json());
 
 // Production için statik dosyaları servis et
 if (process.env.NODE_ENV === 'production') {
