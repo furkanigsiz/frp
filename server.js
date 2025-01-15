@@ -14,8 +14,11 @@ const io = socketIo(server, {
     origin: process.env.NODE_ENV === 'production' 
       ? ['https://frp-p70d.onrender.com', 'http://frp-p70d.onrender.com'] 
       : "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['websocket'],
+  allowEIO3: true
 });
 
 app.use(cors());
