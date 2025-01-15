@@ -7,14 +7,13 @@ const SOCKET_URL = window.location.hostname === 'localhost'
 console.log('Connecting to socket server at:', SOCKET_URL);
 
 const socket = io(SOCKET_URL, {
-  transports: ['polling', 'websocket'],
-  withCredentials: true,
-  secure: true,
-  rejectUnauthorized: false,
+  transports: ['websocket'],
+  withCredentials: false,
+  autoConnect: true,
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
-  autoConnect: true
+  timeout: 20000
 });
 
 socket.on('connect', () => {
@@ -24,7 +23,6 @@ socket.on('connect', () => {
 socket.on('connect_error', (error) => {
   console.error('Socket.io bağlantı hatası:', error);
   console.log('Bağlantı URL:', SOCKET_URL);
-  console.log('Transport:', socket.io.engine.transport.name);
 });
 
 socket.on('disconnect', (reason) => {

@@ -8,43 +8,31 @@ require('dotenv').config();
 const app = express();
 const server = http.createServer(app);
 
-// CORS ayarları
-app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = ['http://localhost:3000', 'https://frp-p70d.onrender.com'];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS policy violation'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-app.use(express.json());
+// Temel CORS ayarları
+app.use(cors());
 
 // Socket.IO ayarları
 const io = socketIo(server, {
   cors: {
-    origin: function(origin, callback) {
-      const allowedOrigins = ['http://localhost:3000', 'https://frp-p70d.onrender.com'];
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('CORS not allowed'));
-      }
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["*"],
+    credentials: false
   },
-  transports: ['polling', 'websocket'],
-  allowEIO3: true,
+  transports: ['websocket'],
   pingTimeout: 60000,
   pingInterval: 25000
 });
+
+// Headers middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+app.use(express.json());
 
 // Production için statik dosyaları servis et
 if (process.env.NODE_ENV === 'production') {
