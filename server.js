@@ -8,31 +8,34 @@ require('dotenv').config();
 const app = express();
 const server = http.createServer(app);
 
-// Temel CORS ayarları
-app.use(cors());
-
-// Socket.IO ayarları
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["*"],
-    credentials: false
-  },
-  transports: ['websocket'],
-  pingTimeout: 60000,
-  pingInterval: 25000
-});
-
-// Headers middleware
+// CORS middleware
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   next();
 });
 
 app.use(express.json());
+
+// Socket.IO ayarları
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
+  },
+  transports: ['polling', 'websocket'],
+  allowEIO3: true,
+  pingTimeout: 60000,
+  pingInterval: 25000
+});
 
 // Production için statik dosyaları servis et
 if (process.env.NODE_ENV === 'production') {
