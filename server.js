@@ -10,10 +10,17 @@ const server = http.createServer(app);
 
 // CORS ayarları
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://frp-p70d.onrender.com'
-    : 'http://localhost:3000',
-  credentials: true
+  origin: function(origin, callback) {
+    const allowedOrigins = ['http://localhost:3000', 'https://frp-p70d.onrender.com'];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy violation'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -21,13 +28,22 @@ app.use(express.json());
 // Socket.IO ayarları
 const io = socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? 'https://frp-p70d.onrender.com'
-      : 'http://localhost:3000',
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: function(origin, callback) {
+      const allowedOrigins = ['http://localhost:3000', 'https://frp-p70d.onrender.com'];
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed'));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
   },
-  transports: ['websocket', 'polling']
+  transports: ['polling', 'websocket'],
+  allowEIO3: true,
+  pingTimeout: 60000,
+  pingInterval: 25000
 });
 
 // Production için statik dosyaları servis et
